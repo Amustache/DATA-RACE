@@ -84,8 +84,10 @@ Il y a un pouvoir terrible dans une blague, dans une histoire, dans le fait de p
 - https://notepad-plus-plus.org/
 
 ### Code
-- I _think_ I coded everythink by myself?
+- I _think_ I coded most of the things by myself?
 - Anyway, https://love2d.org/wiki/Main_Page
+- http://lua-users.org/wiki/FormattingNumbers
+- https://stackoverflow.com/a/10992898
 
 ### Texts
 - https://www.fantasynamegenerators.com/hacker-names.php
@@ -98,6 +100,18 @@ Il y a un pouvoir terrible dans une blague, dans une histoire, dans le fait de p
 - https://www.kenney.nl/assets/ui-pack-space-expansion
 - https://www.freepik.com/premium-vector/human-organs-bones-pixel-art-set-anatomical-system-collection-8-bit-sprite_26708216.htm
 - https://www.reddit.com/r/PixelArt/comments/6l3hhy/oc_cc_newbie_human_template_criticism_appreciated/
+
+### Sounds
+- Me using a mic.
+- https://www.auboutdufil.com/index.php?id=604
+- https://www.auboutdufil.com/index.php?id=569
+
+### Illegal infos
+- https://joshblackman.com/blog/2012/04/23/how-much-are-body-parts-worth-on-the-black-market/
+- https://www.ranker.com/list/organ-cost/april-a-taylor
+- https://medium.datadriveninvestor.com/the-high-value-trade-of-selling-human-body-parts-how-much-is-each-organ-worth-to-science-a5acfc697fc4
+- https://www.theguardian.com/lifeandstyle/2009/jul/28/sperm-egg-donors
+- https://medicalfuturist.com/how-much-is-life-worth/
 
 ### Misc
 - https://www.youtube.com/@Challacade/featured
