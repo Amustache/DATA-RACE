@@ -1,0 +1,169 @@
+love.graphics.setDefaultFilter("nearest", "nearest")
+SCALE = 4
+
+function love.load()
+    player = {
+        mouse = {
+            x = 0,
+            y = 0,
+            primary = false,
+            middle = false,
+            secondary = false,
+            can_grab = nil,
+            can_grab_in = nil,
+            grabbed = nil,
+            is_pressed = false,
+        }
+    }
+
+    body = require "body"
+
+    inventory = require "inventory"
+
+    -- Mouse
+    cursors = {
+        closed = love.mouse.newCursor("sprites/cursors/closed.png", 12, 12),
+        open = love.mouse.newCursor("sprites/cursors/open.png", 12, 12),
+        pointer = love.mouse.newCursor("sprites/cursors/pointer.png", 7, 1),
+        click = love.mouse.newCursor("sprites/cursors/click.png", 7, 1),
+        thumbdown = love.mouse.newCursor("sprites/cursors/thumbdown.png", 12, 12),
+        thumbup = love.mouse.newCursor("sprites/cursors/thumbup.png", 12, 12),
+    }
+
+    love.mouse.setCursor(cursors.pointer)
+end
+
+function love.update(dt)  -- Fuck you
+end
+
+function love.draw()
+    player.mouse.can_grab = nil
+    player.mouse.can_grab_in = nil
+
+    -- Organs currently in a body
+    body.draw()
+    if body.is_hovered_by(player.mouse) then
+        player.mouse.can_grab_in = body.organs
+    end
+
+    for idx, organ in pairs(body.organs) do
+        local x = body.x + SCALE * organ.x
+        local y = body.y + SCALE * organ.y
+        local max_x = x + SCALE * organ.max_x
+        local max_y = y + SCALE * organ.max_y
+
+        love.graphics.draw(organ.sprite, x, y, nil, SCALE)
+
+        if player.mouse.x > x and player.mouse.x < max_x and player.mouse.y > y and player.mouse.y < max_y then
+            player.mouse.can_grab = idx
+        end
+    end
+
+    -- Organs currently in the inventory
+    inventory.draw()
+    if inventory.is_hovered_by(player.mouse) then
+        player.mouse.can_grab_in = inventory.organs
+    end
+
+    for idx, organ in pairs(inventory.organs) do
+        local x = inventory.x + SCALE * organ.x
+        local y = inventory.y + SCALE * organ.y
+        local max_x = x + SCALE * organ.max_x
+        local max_y = y + SCALE * organ.max_y
+
+        love.graphics.draw(organ.sprite, x, y, nil, 4)
+
+        if player.mouse.x > x and player.mouse.x < max_x and player.mouse.y > y and player.mouse.y < max_y then
+            player.mouse.can_grab = idx
+            player.mouse.can_grab_in = inventory.organs
+        end
+    end
+
+    -- Organ grabbed
+    if player.mouse.grabbed ~= nil then
+        local organ = player.mouse.grabbed
+
+        local x = player.mouse.x - 4 * organ.max_x / 2
+        local y = player.mouse.y - 4 * organ.max_y / 2
+
+        love.graphics.draw(organ.sprite, x, y, nil, 4)
+    end
+end
+
+-- Mouse
+function love.mousemoved(x, y, dx, dy, istouch)
+    player.mouse.x = x
+    player.mouse.y = y
+
+    if not player.mouse.is_pressed then
+        if player.mouse.can_grab ~= nil then
+            love.mouse.setCursor(cursors.open)
+        else
+            love.mouse.setCursor(cursors.pointer)
+        end
+    end
+end
+
+function love.mousepressed(x, y, button, istouch)
+    if button == 1 then -- primary button
+        player.mouse.primary = true
+        player.mouse.is_pressed = true
+
+        if player.mouse.can_grab ~= nil then
+            player.mouse.grabbed = player.mouse.can_grab_in[player.mouse.can_grab]
+            player.mouse.can_grab_in[player.mouse.can_grab] = nil
+
+            if player.mouse.can_grab_in == inventory.organs then
+                inventory.free_position(player.mouse.grabbed.name)
+            end
+
+            love.mouse.setCursor(cursors.closed)
+        else
+            love.mouse.setCursor(cursors.click)
+        end
+    end
+
+    if button == 2 then -- secondary button
+        player.mouse.secondary = true
+    end
+
+    if button == 3 then -- secondary button
+        player.mouse.middle = true
+    end
+end
+
+function love.mousereleased(x, y, button, istouch)
+    if button == 1 then -- primary button
+        player.mouse.primary = false
+        player.mouse.is_pressed = false
+
+        if player.mouse.grabbed ~= nil then
+            local organ = player.mouse.grabbed
+
+            if body.is_hovered_by(player.mouse) then
+                body.organs[organ.name] = organ
+                organ.x = organ.body_x
+                organ.y = organ.body_y
+            else
+                inventory.organs[organ.name] = organ
+                local x, y = inventory.next_position(organ.name)
+                organ.x = x
+                organ.y = y
+            end
+
+            player.mouse.grabbed = nil
+
+            love.mouse.setCursor(cursors.open)
+        else
+            love.mouse.setCursor(cursors.pointer)
+        end
+    end
+
+    if button == 2 then -- secondary button
+        player.mouse.secondary = false
+    end
+
+    if button == 3 then -- secondary button
+        player.mouse.middle = false
+    end
+end
