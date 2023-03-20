@@ -1,6 +1,8 @@
 # DATA RACE
 Made in (about) 24h for the [Orbital Game Jam 5](https://itch.io/jam/orbital-game-jam-5).
 
+Final result here: https://astache.itch.io/data-race
+
 ## GDD
 
 ### Themes
